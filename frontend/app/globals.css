@@ -1,0 +1,331 @@
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+/*
+  ShopPilot AI — unified design system.
+
+  Two surfaces share one palette:
+  1. Marketing + app chrome: soft white, indigo→violet→pink gradient, lavender
+     surfaces, hairline borders, generous radius. These use the `.sp-*` utility
+     layer below.
+  2. The live agent pipeline (PipelineDiagram, ProgressIndicator, ProductCard)
+     uses the Tailwind theme tokens (`primary`, `card`, `ring`, ...). Those
+     tokens are tuned to the SAME indigo brand so the trace never looks like it
+     belongs to a different app.
+
+  Brand signal color = indigo #4d5cf5 → violet #8b4cff → pink #cc56db.
+*/
+:root {
+  /* ── Tailwind theme tokens (HSL channels) ── */
+  --background: 228 60% 99%;
+  --foreground: 231 55% 16%;
+  --card: 0 0% 100%;
+  --card-foreground: 231 55% 16%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 231 55% 16%;
+
+  --primary: 245 89% 63%;          /* indigo #4d5cf5 */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 246 60% 97%;
+  --secondary-foreground: 231 45% 22%;
+  --muted: 240 30% 96%;
+  --muted-foreground: 231 12% 46%;
+  --accent: 267 100% 65%;          /* violet #8b4cff */
+  --accent-foreground: 0 0% 100%;
+  --destructive: 351 74% 61%;      /* #e55567 */
+  --destructive-foreground: 0 0% 100%;
+  --border: 245 34% 93%;
+  --input: 245 34% 93%;
+  --ring: 245 89% 63%;
+  --radius: 0.875rem;
+
+  /* Pipeline node glow states, kept from the trace's own vocabulary. */
+  --glow-active: 245 89% 66%;
+  --glow-done: 152 63% 42%;
+  --glow-retry: 35 92% 52%;
+  --glow-fail: 351 74% 55%;
+  --glow-memory: 200 85% 52%;
+
+  /* ── ShopPilot design-system tokens ── */
+  --sp-bg: #ffffff;
+  --sp-surface: rgba(255, 255, 255, 0.86);
+  --sp-surface-soft: #fbfaff;
+  --sp-border: #e9e8f5;
+  --sp-border-strong: #ddd9f5;
+  --sp-ink: #12183f;
+  --sp-ink-soft: #4f5777;
+  --sp-muted: #7b8199;
+  --sp-blue: #4778ff;
+  --sp-indigo: #4d5cf5;
+  --sp-violet: #8b4cff;
+  --sp-pink: #cc56db;
+  --sp-success: #1aa56b;
+  --sp-warning: #d99717;
+  --sp-danger: #e55567;
+  --sp-shadow-sm: 0 6px 24px rgba(44, 36, 116, 0.06);
+  --sp-shadow-md: 0 14px 42px rgba(54, 40, 138, 0.10);
+  --sp-gradient: linear-gradient(100deg, #4677ff 0%, #7a55ef 50%, #cc55d9 100%);
+  --sp-gradient-soft: linear-gradient(135deg, rgba(71, 120, 255, 0.09), rgba(139, 76, 255, 0.08), rgba(204, 86, 219, 0.08));
+}
+
+.dark {
+  --background: 231 40% 7%;
+  --foreground: 228 40% 96%;
+  --card: 231 34% 11%;
+  --card-foreground: 228 40% 96%;
+  --popover: 231 34% 11%;
+  --popover-foreground: 228 40% 96%;
+
+  --primary: 245 90% 70%;
+  --primary-foreground: 231 40% 7%;
+  --secondary: 231 26% 16%;
+  --secondary-foreground: 228 30% 92%;
+  --muted: 231 24% 16%;
+  --muted-foreground: 228 14% 66%;
+  --accent: 267 90% 72%;
+  --accent-foreground: 231 40% 7%;
+  --destructive: 351 72% 60%;
+  --destructive-foreground: 228 40% 96%;
+  --border: 231 22% 19%;
+  --input: 231 22% 19%;
+  --ring: 245 90% 70%;
+
+  --glow-active: 245 90% 72%;
+  --glow-done: 152 60% 50%;
+  --glow-retry: 38 92% 57%;
+  --glow-fail: 351 78% 64%;
+  --glow-memory: 200 88% 60%;
+}
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 4px);
+  --radius-sm: calc(var(--radius) - 6px);
+}
+
+/* ─── Keyframes ─── */
+@keyframes pipeline-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 6px hsl(var(--glow-active) / 0.8))
+            drop-shadow(0 0 16px hsl(var(--glow-active) / 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 14px hsl(var(--glow-active) / 1))
+            drop-shadow(0 0 30px hsl(var(--glow-active) / 0.8));
+  }
+}
+
+@keyframes laser-flow {
+  from { stroke-dashoffset: 40; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fit-viewport-scale {
+  0%   { opacity: 0; transform: scale(0.98) translateY(4px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+/* ─── Base ─── */
+* {
+  box-sizing: border-box;
+  border-color: hsl(var(--border));
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-sans, ui-sans-serif), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button, input, textarea { font: inherit; }
+button { cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+::selection { background: rgba(139, 76, 255, 0.15); }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ─── ShopPilot design-system utility layer ─── */
+.sp-page {
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 5% 12%, rgba(139, 76, 255, 0.08), transparent 18rem),
+    radial-gradient(circle at 96% 86%, rgba(71, 120, 255, 0.08), transparent 22rem),
+    var(--sp-bg);
+}
+
+.sp-container {
+  width: min(1200px, calc(100vw - 48px));
+  margin-inline: auto;
+}
+
+/* Container for pages rendered INSIDE the app shell (next to the sidebar).
+   Uses the width of its parent (the main column), not the full viewport, so
+   content never overflows past the sidebar. Centered with a max width and
+   comfortable gutters. */
+.sp-app-container {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 28px;
+}
+
+@media (max-width: 640px) {
+  .sp-app-container { padding-inline: 16px; }
+}
+
+.sp-card {
+  border: 1px solid var(--sp-border);
+  border-radius: 22px;
+  background: var(--sp-surface);
+  box-shadow: var(--sp-shadow-sm);
+}
+
+/* Product cards in the alternatives rail: same card, with a lift on hover. */
+.sp-product-card {
+  border: 1px solid var(--sp-border);
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: var(--sp-shadow-sm);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.sp-product-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--sp-border-strong);
+  box-shadow: var(--sp-shadow-md);
+}
+
+.sp-gradient-text {
+  background: var(--sp-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Primary action. Works as a block button or an icon button (h-/w- from
+   the utility classes on the element decide its shape). */
+.sp-gradient-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 0;
+  color: #ffffff;
+  background: var(--sp-gradient);
+  border-radius: 12px;
+  box-shadow: 0 10px 26px rgba(117, 83, 237, 0.22);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+.sp-gradient-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(117, 83, 237, 0.28);
+  filter: saturate(1.05);
+}
+.sp-gradient-btn:active { transform: translateY(0); }
+.sp-gradient-btn:disabled {
+  filter: grayscale(0.4);
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Quiet secondary icon button (save / bookmark). */
+.sp-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--sp-border);
+  border-radius: 12px;
+  background: #ffffff;
+  color: var(--sp-ink-soft);
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+.sp-btn-icon:hover {
+  background: var(--sp-surface-soft);
+  border-color: var(--sp-border-strong);
+  color: var(--sp-violet);
+  transform: translateY(-1px);
+}
+.sp-btn-icon:active { transform: translateY(0); }
+
+/* Suggestion / example chips. */
+.sp-chip {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--sp-border);
+  border-radius: 9999px;
+  background: #ffffff;
+  color: #41485e;
+  box-shadow: 0 4px 14px rgba(28, 32, 63, 0.03);
+  transition: border-color 0.15s ease, color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+.sp-chip:hover {
+  border-color: var(--sp-border-strong);
+  color: var(--sp-indigo);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(94, 79, 190, 0.10);
+}
+
+/* Consistent, calm focus treatment on interactive brand surfaces. */
+.sp-focus:focus-visible {
+  outline: 3px solid rgba(71, 120, 255, 0.22);
+  outline-offset: 2px;
+  border-radius: 12px;
+}
+
+/* Global keyboard focus ring for everything else. */
+:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+@media (max-width: 900px) {
+  .sp-container { width: min(100% - 28px, 760px); }
+}
+
+/* Respect reduced-motion preferences across the app. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

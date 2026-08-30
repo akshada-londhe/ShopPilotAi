@@ -1,0 +1,14 @@
+# backend/.gitignore
+.env
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+chroma_db/
+chroma_groq/
+*.egg-info/
+benchmarks/results_*.json
+!benchmarks/results_SAMPLE.json

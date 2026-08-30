@@ -1,0 +1,239 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Kill browser native focus ring & border rectangle on all inputs */
+input,
+input:focus,
+input:focus-visible,
+input:active,
+textarea:focus,
+textarea:focus-visible,
+select:focus,
+button:focus {
+  outline: 0 !important;
+  outline-style: none !important;
+  box-shadow: none !important;
+}
+
+/* Design System Tokens */
+:root {
+  --sp-bg: #fff;
+  --sp-surface: rgba(255,255,255,.86);
+  --sp-surface-soft: #fbfaff;
+  --sp-border: #e9e8f5;
+  --sp-border-strong: #ddd9f5;
+
+  --sp-ink: #12183f;
+  --sp-ink-soft: #4f5777;
+  --sp-muted: #7b8199;
+
+  --sp-blue: #4778ff;
+  --sp-indigo: #4d5cf5;
+  --sp-violet: #8b4cff;
+  --sp-pink: #cc56db;
+
+  --sp-success: #1aa56b;
+  --sp-warning: #d99717;
+  --sp-danger: #e55567;
+
+  --sp-radius-sm: 10px;
+  --sp-radius-md: 16px;
+  --sp-radius-lg: 22px;
+  --sp-radius-xl: 30px;
+
+  --sp-shadow-sm: 0 6px 24px rgba(44, 36, 116, .06);
+  --sp-shadow-md: 0 14px 42px rgba(54, 40, 138, .10);
+
+  --sp-gradient: linear-gradient(100deg, #4677ff 0%, #7a55ef 50%, #cc55d9 100%);
+  --sp-gradient-soft: linear-gradient(135deg, rgba(71,120,255,.09), rgba(139,76,255,.08), rgba(204,86,219,.08));
+
+  /* Transition shorthand reused everywhere */
+  --sp-transition: transform .18s cubic-bezier(.34,1.26,.64,1), box-shadow .18s ease, background-color .14s ease, border-color .14s ease;
+}
+
+/* Background gradient */
+.sp-page {
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 5% 12%, rgba(139,76,255,.08), transparent 18rem),
+    radial-gradient(circle at 96% 86%, rgba(71,120,255,.08), transparent 22rem),
+    #fff;
+}
+
+/* Shell container */
+.sp-shell { min-height: 100dvh; }
+.sp-container { width: min(1200px, calc(100vw - 48px)); margin: 0 auto; }
+
+/* Card base */
+.sp-card {
+  border: 1px solid var(--sp-border);
+  border-radius: var(--sp-radius-lg);
+  background: var(--sp-surface);
+  box-shadow: var(--sp-shadow-sm);
+  transition: box-shadow .2s ease, transform .18s ease;
+}
+.sp-card:has(a:hover), .sp-card:hover { /* subtle lift on interactive cards */
+  box-shadow: 0 10px 36px rgba(54,40,138,.10);
+}
+
+/* Gradient text */
+.sp-gradient-text {
+  background: var(--sp-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ── Gradient button (primary CTA) ────────────────────────────────────────── */
+.sp-gradient-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  color: #fff;
+  background: var(--sp-gradient);
+  border-radius: 12px;
+  box-shadow: 0 8px 22px rgba(117,83,237,.22);
+  transition: var(--sp-transition);
+  cursor: pointer;
+}
+.sp-gradient-btn:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.015);
+  box-shadow: 0 14px 34px rgba(117,83,237,.34);
+  filter: brightness(1.06);
+}
+.sp-gradient-btn:active:not(:disabled) {
+  transform: translateY(0) scale(1);
+  box-shadow: 0 6px 18px rgba(117,83,237,.22);
+  filter: brightness(1);
+}
+.sp-gradient-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ── Ghost / outline buttons ──────────────────────────────────────────────── */
+.sp-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 1px solid var(--sp-border);
+  background: transparent;
+  color: var(--sp-ink-soft);
+  transition: var(--sp-transition);
+  cursor: pointer;
+}
+.sp-btn-ghost:hover {
+  background: #f6f3ff;
+  border-color: #c5b9f5;
+  color: #5a3edb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(90,62,219,.10);
+}
+.sp-btn-ghost:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* ── Icon-circle buttons (heart, back, avatar, etc.) ─────────────────────── */
+.sp-btn-icon {
+  display: grid;
+  place-items: center;
+  border-radius: 9999px;
+  border: 1px solid var(--sp-border);
+  background: #fff;
+  color: var(--sp-muted);
+  transition: var(--sp-transition);
+  cursor: pointer;
+}
+.sp-btn-icon:hover {
+  background: #f5f2ff;
+  border-color: #c5b9f5;
+  color: #5a3edb;
+  transform: scale(1.08);
+  box-shadow: 0 4px 14px rgba(90,62,219,.12);
+}
+.sp-btn-icon:active {
+  transform: scale(1);
+}
+
+/* ── Nav / sidebar links ──────────────────────────────────────────────────── */
+.sp-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: 12px;
+  padding: 0.6rem 1rem;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--sp-ink);
+  transition: var(--sp-transition);
+}
+.sp-nav-link:hover {
+  background: #f6f3ff;
+  color: #5a3edb;
+  transform: translateX(2px);
+}
+.sp-nav-link.active {
+  background: #f2edff;
+  color: #5f42ef;
+}
+
+/* ── Example-chip buttons (home search suggestions) ──────────────────────── */
+.sp-chip {
+  border-radius: 9999px;
+  border: 1px solid #e5e3ec;
+  background: #fff;
+  color: #41485e;
+  transition: var(--sp-transition);
+  cursor: pointer;
+}
+.sp-chip:hover {
+  border-color: #c9befb;
+  color: #5142b8;
+  background: #faf8ff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(100,78,220,.09);
+}
+.sp-chip:active { transform: translateY(0); }
+
+/* ── Product / alternative cards ─────────────────────────────────────────── */
+.sp-product-card {
+  border: 1px solid #eceaf3;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 6px 22px rgba(53,41,131,.04);
+  transition: var(--sp-transition);
+}
+.sp-product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 36px rgba(53,41,131,.11);
+  border-color: #d8d3f0;
+}
+
+/* ── Focus state ──────────────────────────────────────────────────────────── */
+.sp-focus:focus-visible {
+  outline: 3px solid rgba(71,120,255,.25);
+  outline-offset: 2px;
+}
+
+/* ── Responsive container ────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .sp-container { width: min(100% - 28px, 760px); }
+}
+
+/* ── Shimmer animation for search loading bar ────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+/* ── Respect prefers-reduced-motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

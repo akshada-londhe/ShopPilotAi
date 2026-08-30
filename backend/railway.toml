@@ -1,0 +1,23 @@
+[build]
+builder = "NIXPACKS"
+
+[deploy]
+startCommand = "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+healthcheckPath = "/health"
+healthcheckTimeout = 30
+restartPolicyType = "ON_FAILURE"
+
+# ── Persistent storage ────────────────────────────────────────────────────────
+# ChromaDB (product cache + user accounts) writes to disk. Railway's container
+# filesystem is EPHEMERAL: without a volume, all users and cached products are
+# lost on every redeploy or restart.
+#
+# Attach a Railway Volume to this service and mount it at /data, then set the
+# service env var:
+#     CHROMA_PERSIST_DIR=/data/chroma
+#
+# Railway volumes are provisioned in the dashboard (Service -> Settings ->
+# Volumes) or via `railway volume`. The mount path must match the directory
+# CHROMA_PERSIST_DIR points into.
+[deploy.volumes]
+data = "/data"

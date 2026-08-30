@@ -1,0 +1,47 @@
+[project]
+name = "agentic-rag-backend"
+version = "0.1.0"
+description = "Agentic RAG Matching Engine backend"
+requires-python = ">=3.11"
+
+dependencies = [
+    "langchain-core==0.3.32",
+    "langchain-groq==0.2.3",
+    "langchain-openai==0.3.0",
+    "langchain-community==0.3.16",
+    "langgraph==0.2.62",
+    "pydantic==2.10.5",
+    "pydantic-settings==2.7.1",
+    "tavily-python==0.5.0",
+    "chromadb==0.5.23",
+    "fastapi==0.115.6",
+    "uvicorn==0.34.0",
+    "sse-starlette==2.2.1",
+    "langfuse==2.59.7",
+    "python-dotenv==1.0.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==8.3.4",
+    "pytest-asyncio==0.25.2",
+    "mypy==1.14.1",
+    "ruff==0.9.2",
+    "pre-commit==4.0.1",
+]
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+exclude = ["chroma_db*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-m 'not integration and not benchmark'"
+asyncio_default_fixture_loop_scope = "function"
+markers = [
+    "integration: real API calls, run manually, not on every commit",
+    "benchmark: golden query benchmark suite, run manually before releases",
+]
+
+[tool.mypy]
+python_version = "3.11"

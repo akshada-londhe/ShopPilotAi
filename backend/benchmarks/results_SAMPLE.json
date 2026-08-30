@@ -1,0 +1,13 @@
+{
+  "timestamp": "SAMPLE",
+  "summary": {
+    "total_queries": 18,
+    "first_pass_rate": 0.6667,
+    "after_retry_pass_rate": 0.8333,
+    "avg_iterations": 1.33,
+    "p50_latency_seconds": 2.4,
+    "p95_latency_seconds": 6.8,
+    "errors": 1
+  },
+  "outcomes": []
+}
