@@ -53,7 +53,6 @@ def build_llm(
             max_retries=0,
             timeout=timeout_val,
             max_completion_tokens=max_tokens_val,
-            reasoning_effort="low",
         )
 
     raise ValueError(f"Unsupported LLM provider: {provider}")
