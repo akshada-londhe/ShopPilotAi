@@ -6,7 +6,12 @@ import { NextRequest, NextResponse } from "next/server";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const BACKEND_URL = process.env.SHOPPILOT_BACKEND_URL ?? "http://localhost:8000";
+const getBackendUrl = () => {
+  if (process.env.SHOPPILOT_BACKEND_URL) return process.env.SHOPPILOT_BACKEND_URL;
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return "http://localhost:8000";
+};
+const BACKEND_URL = getBackendUrl();
 const API_KEY = process.env.SHOPPILOT_API_KEY ?? "";
 
 export async function GET(req: NextRequest) {

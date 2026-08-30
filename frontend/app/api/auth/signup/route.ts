@@ -1,7 +1,12 @@
 // Next.js API route — proxy signup to FastAPI backend
 import { NextRequest, NextResponse } from "next/server";
 
-const BACKEND_URL = process.env.SHOPPILOT_BACKEND_URL ?? "http://localhost:8000";
+const getBackendUrl = () => {
+  if (process.env.SHOPPILOT_BACKEND_URL) return process.env.SHOPPILOT_BACKEND_URL;
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return "http://localhost:8000";
+};
+const BACKEND_URL = getBackendUrl();
 
 export async function POST(req: NextRequest) {
   let body: unknown;
