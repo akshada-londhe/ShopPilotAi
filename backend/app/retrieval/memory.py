@@ -47,8 +47,29 @@ def get_memory_collection() -> Collection:
     )
 
 
+import os
+import shutil
+
 def _embed_text(text: str) -> list[float]:
-    return [float(value) for value in _get_embedder()([text])[0]]
+    try:
+        return [float(value) for value in _get_embedder()([text])[0]]
+    except Exception as e:
+        logger.warning(f"Embedding calculation failed ({e}), attempting ONNX cache cleanup and retry")
+        for path in [
+            os.path.expanduser("~/.cache/chroma/onnx_models"),
+            "/opt/render/.cache/chroma/onnx_models",
+        ]:
+            if os.path.exists(path):
+                try:
+                    shutil.rmtree(path, ignore_errors=True)
+                except Exception:
+                    pass
+        try:
+            _get_embedder.cache_clear()
+            return [float(value) for value in _get_embedder()([text])[0]]
+        except Exception:
+            logger.error("ONNX embedding retry failed, returning fallback zero vector")
+            return [0.0] * 384
 
 
 def _normalize_query(query: str) -> str:
