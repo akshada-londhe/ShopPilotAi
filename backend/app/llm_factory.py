@@ -23,9 +23,9 @@ def build_llm(
     provider = provider_override or STAGE_PROVIDERS.get(stage, "groq")
     
     if provider == "groq":
-        model_name = getattr(settings, "groq_model", "openai/gpt-oss-20b")
+        model_name = settings.groq_model
     else:
-        model_name = getattr(settings, "openrouter_model", "openai/gpt-oss-20b")
+        model_name = settings.openrouter_model
 
     timeout_val = timeout_override if timeout_override is not None else STAGE_TIMEOUTS.get(stage, 10)
     max_tokens_val = STAGE_MAX_TOKENS.get(stage, 512)
